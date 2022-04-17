@@ -17,17 +17,10 @@ export default function RegisterPage() {
   const [surname, setSurname] = useState("");
   const [navigteToHome, setNavigteToHome] = useState(false);
 
-  const [register, { data }] = useMutation<{ createUser: User }>(createUserMutation, { onError: () => dispatch(unsetLoading()) });
+  const [register] = useMutation<{ createUser: User }>(createUserMutation, { onError: () => dispatch(unsetLoading()) });
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (data?.createUser?.id) {
-      dispatch(unsetLoading());
-      Utils.saveUser(data?.createUser);
-      setNavigteToHome(true);
-    }
-  }, [data]);
   if (navigteToHome) return <Navigate replace to={RoutePaths.home} />;
 
   const submit = async () => {
@@ -37,7 +30,12 @@ export default function RegisterPage() {
     }
     const dataCall = { name, surname, email, password };
     dispatch(setLoading());
-    await register({ variables: { data: dataCall } });
+    const result = await register({ variables: { data: dataCall } });
+    if (result?.data?.createUser?.id) {
+      dispatch(unsetLoading());
+      Utils.saveUser(result?.data?.createUser);
+      setNavigteToHome(true);
+    }
   };
 
   return (

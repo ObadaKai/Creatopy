@@ -9,9 +9,7 @@ export default class UserService {
   }
 
   async resetUserPassword(email: string, oldPassowrd: string, newPassword: string) {
-    oldPassowrd = await generateHash(oldPassowrd);
     const user = await this.getUserByEmailAndPassword(email, oldPassowrd);
-    if (!user) throw new Error("Either email or oldPassword is incorrect");
     user.password = await generateHash(newPassword);
     await UserSQ.update({ password: user.password }, { where: { id: user.id } });
     return user;
@@ -19,7 +17,7 @@ export default class UserService {
 
   async getUserByEmailAndPassword(email: string, password: string) {
     const user = await UserSQ.findOne({ where: { email } });
-    if (!user || !compareHash(password, user.password)) throw new Error("Either email or oldPassword is incorrect");
+    if (!user || !(await compareHash(password, user.password))) throw new Error("Either email or oldPassword is incorrect");
     return user.get();
   }
 }

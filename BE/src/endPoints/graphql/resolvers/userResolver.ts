@@ -12,8 +12,8 @@ export default class UserResolver {
   }
 
   @Mutation(() => UserGQL)
-  async resetUserPassword(@Arg("email") email: string, @Arg("oldPassowrd") oldPassowrd: string, @Arg("newPassword") newPassword: string): Promise<UserGQL> {
-    return this.userService.resetUserPassword(email, oldPassowrd, newPassword);
+  async resetUserPassword(@Arg("email") email: string, @Arg("oldPassword") oldPassword: string, @Arg("newPassword") newPassword: string): Promise<UserGQL> {
+    return this.userService.resetUserPassword(email, oldPassword, newPassword);
   }
 
   @Mutation(() => UserGQL)

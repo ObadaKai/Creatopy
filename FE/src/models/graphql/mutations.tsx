@@ -20,8 +20,8 @@ export const createTodoMutation = gql`
 `;
 
 export const resetUserPasswordMutation = gql`
-  mutation ($email: String!, $oldPassowrd: String!, $newPassword: String!) {
-    resetUserPassword(email: $email, oldPassowrd: $oldPassowrd, newPassword: $newPassword) {
+  mutation ($email: String!, $oldPassword: String!, $newPassword: String!) {
+    resetUserPassword(email: $email, oldPassword: $oldPassword, newPassword: $newPassword) {
       id
       name
       surname

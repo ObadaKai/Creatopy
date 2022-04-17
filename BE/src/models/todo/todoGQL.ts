@@ -14,7 +14,7 @@ export class TodoGQL implements Todo {
 }
 
 @InputType()
-export class TodoGQLInput implements Partial<TodoGQL> {
+export class TodoGQLInput implements Partial<Todo> {
   @Field({ nullable: true })
   id?: number;
   @Field()

@@ -12,7 +12,7 @@ type Mutation {
   createTodo(data: TodoGQLInput!): TodoGQL!
   createUser(data: UserGQLInput!): UserGQL!
   deleteTodo(id: Float!): Boolean!
-  resetUserPassword(email: String!, newPassword: String!, oldPassowrd: String!): UserGQL!
+  resetUserPassword(email: String!, newPassword: String!, oldPassword: String!): UserGQL!
 }
 
 type Query {

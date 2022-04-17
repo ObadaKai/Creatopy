@@ -15,7 +15,7 @@ export class UserGQL implements User {
 }
 
 @InputType()
-export class UserGQLInput implements Partial<UserGQL> {
+export class UserGQLInput implements Partial<User> {
   @Field({ nullable: true })
   id?: number;
   @Field()

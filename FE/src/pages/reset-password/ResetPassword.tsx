@@ -16,16 +16,9 @@ export default function ResetPasswordPage() {
   const [oldPassword, setOldPassword] = useState("");
   const [navigteToHome, setNavigteToHome] = useState(false);
 
-  const [resetPassword, { data }] = useMutation<{ resetUserPassword: User }>(resetUserPasswordMutation, { onError: () => dispatch(unsetLoading()) });
+  const [resetPassword] = useMutation<{ resetUserPassword: User }>(resetUserPasswordMutation, { onError: () => dispatch(unsetLoading()), notifyOnNetworkStatusChange: true });
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (data?.resetUserPassword?.id) {
-      dispatch(unsetLoading());
-      Utils.saveUser(data?.resetUserPassword);
-      setNavigteToHome(true);
-    }
-  }, [data]);
   if (navigteToHome) return <Navigate replace to={RoutePaths.home} />;
 
   const submit = async () => {
@@ -33,9 +26,13 @@ export default function ResetPasswordPage() {
       toast("All Fields should be populated");
       return;
     }
-    const dataCall = { email, newPassword, oldPassword };
     dispatch(setLoading());
-    resetPassword({ variables: { dataCall } });
+    const result = await resetPassword({ variables: { email, newPassword, oldPassword } });
+    if (result?.data?.resetUserPassword?.id) {
+      dispatch(unsetLoading());
+      Utils.saveUser(result?.data?.resetUserPassword);
+      setNavigteToHome(true);
+    }
   };
   return (
     <div className="floating-box-wrapper">
