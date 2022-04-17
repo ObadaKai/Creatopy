@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import ReactLoading from "react-loading";
 import { useSelector } from "react-redux";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import ReduxState from "../models/app/reduxState";
 import { HomeLoadablePage, LoginLoadablePage, RegisterLoadablePage, ResetPasswordLoadablePage } from "./loadableComponents";
@@ -28,6 +28,7 @@ export default function AppRouter() {
           <Route path={RoutePaths.home} element={<RoutesGuard />}>
             <Route path={RoutePaths.home} element={<HomeLoadablePage />} />
           </Route>
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
     </React.Fragment>
