@@ -1,17 +1,25 @@
 import UserSQ from "../models/user/userSQ";
 import User from "../models/user/user";
+import { compareHash, generateHash } from "../utils/utils";
 
 export default class UserService {
-  returnSingleUser(id: number) {
-    return UserSQ.findByPk(id);
+  async createUser(user: Omit<User, "id">) {
+    user.password = await generateHash(user.password);
+    return (await UserSQ.create(user)).get();
   }
-  returnAllUsers() {
-    return UserSQ.findAll();
+
+  async resetUserPassword(email: string, oldPassowrd: string, newPassword: string) {
+    oldPassowrd = await generateHash(oldPassowrd);
+    const user = await this.getUserByEmailAndPassword(email, oldPassowrd);
+    if (!user) throw new Error("Either email or oldPassword is incorrect");
+    user.password = await generateHash(newPassword);
+    await UserSQ.update({ password: user.password }, { where: { id: user.id } });
+    return user;
   }
-  createUser(user: Omit<User, "id">) {
-    return UserSQ.create(user);
-  }
-  deleteUser(id: number) {
-    return UserSQ.destroy({ where: { id } });
+
+  async getUserByEmailAndPassword(email: string, password: string) {
+    const user = await UserSQ.findOne({ where: { email } });
+    if (!user || !compareHash(password, user.password)) throw new Error("Either email or oldPassword is incorrect");
+    return user.get();
   }
 }

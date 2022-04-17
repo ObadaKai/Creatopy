@@ -8,7 +8,7 @@ export class TodoGQL implements Todo {
   @Field()
   title: string;
   @Field()
-  userID: string;
+  userID: number;
   @Field({ nullable: true })
   createdAt?: Date;
 }
@@ -20,7 +20,7 @@ export class TodoGQLInput implements Partial<TodoGQL> {
   @Field()
   title: string;
   @Field()
-  userID: string;
+  userID: number;
   @Field({ nullable: true })
   createdAt?: Date;
 }

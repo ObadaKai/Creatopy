@@ -2,16 +2,13 @@ import Todo from "../models/todo/todo";
 import TodoSQ from "../models/todo/todoSQ";
 
 export default class TodoService {
-  returnSingleUser(id: number) {
-    return TodoSQ.findByPk(id);
+  async getAllTodosByUserID(userID: number) {
+    return (await TodoSQ.findAll({ where: { userID } })).map((x) => x.get());
   }
-  returnAllUsers() {
-    return TodoSQ.findAll();
+  async createTodo(todo: Omit<Todo, "id">) {
+    return (await TodoSQ.create(todo)).get();
   }
-  createUser(todo: Omit<Todo, "id">) {
-    return TodoSQ.create(todo);
-  }
-  deleteUser(id: number) {
+  deleteTodo(id: number) {
     return TodoSQ.destroy({ where: { id } });
   }
 }

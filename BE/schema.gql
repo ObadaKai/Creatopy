@@ -12,14 +12,12 @@ type Mutation {
   createTodo(data: TodoGQLInput!): TodoGQL!
   createUser(data: UserGQLInput!): UserGQL!
   deleteTodo(id: Float!): Boolean!
-  deleteUser(id: Float!): Boolean!
+  resetUserPassword(email: String!, newPassword: String!, oldPassowrd: String!): UserGQL!
 }
 
 type Query {
-  returnAllTodoG: [TodoGQL!]!
-  returnAllUsers: [UserGQL!]!
-  returnSingleTodo(id: Float!): TodoGQL!
-  returnSingleUser(id: Float!): UserGQL!
+  getAllTodosByUserID(userID: Float!): [TodoGQL!]
+  getUserByEmailAndPassword(email: String!, password: String!): UserGQL
 }
 
 """The Todo List model"""
@@ -27,14 +25,14 @@ type TodoGQL {
   createdAt: DateTime
   id: Float!
   title: String!
-  userID: String!
+  userID: Float!
 }
 
 input TodoGQLInput {
   createdAt: DateTime
   id: Float
   title: String!
-  userID: String!
+  userID: Float!
 }
 
 """The users model"""

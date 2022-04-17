@@ -1,4 +1,4 @@
-export default class Todo {
+export default interface Todo {
   id: number;
   title: string;
   userID: number;

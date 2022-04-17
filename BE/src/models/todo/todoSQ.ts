@@ -1,20 +1,20 @@
-import { Table, Model, Column, ForeignKey, CreatedAt, BelongsTo } from "sequelize-typescript";
+import { Table, Model, Column, ForeignKey, CreatedAt, BelongsTo, Unique, AutoIncrement, PrimaryKey } from "sequelize-typescript";
 import { DataTypes, Optional } from "sequelize";
 import Todo from "./todo";
 import UserSQ from "../user/userSQ";
 
 @Table({ timestamps: true, tableName: "Todo" })
 export default class TodoSQ extends Model<Todo, Optional<Todo, "id">> implements Todo {
-  @Column({
-    primaryKey: true,
-    type: DataTypes.NUMBER
-  })
+  @Unique
+  @AutoIncrement
+  @PrimaryKey
+  @Column(DataTypes.INTEGER)
   id: number;
   @Column(DataTypes.STRING)
   title: string;
   @ForeignKey(() => UserSQ)
-  @Column(DataTypes.STRING)
-  userID: string;
+  @Column(DataTypes.NUMBER)
+  userID: number;
   @BelongsTo(() => UserSQ)
   user: UserSQ;
   @CreatedAt

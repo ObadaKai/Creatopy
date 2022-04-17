@@ -41,7 +41,6 @@ const start = async () => {
   });
 
   try {
-    await sequalize.authenticate();
     await sequalize.sync();
     console.log("Connection has been established successfully.");
   } catch (error) {
