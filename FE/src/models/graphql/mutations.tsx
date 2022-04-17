@@ -15,6 +15,7 @@ export const createTodoMutation = gql`
     createTodo(data: $data) {
       id
       title
+      createdAt
     }
   }
 `;
