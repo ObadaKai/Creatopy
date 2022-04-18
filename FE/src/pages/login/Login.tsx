@@ -14,17 +14,19 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [navigteToHome, setNavigteToHome] = useState(false);
 
-  const [login, { data }] = useLazyQuery<{ getUserByEmailAndPassword: User }>(getUserByEmailAndPasswordQuery, { onError: () => dispatch(unsetLoading()) });
+  const [login] = useLazyQuery<{ getUserByEmailAndPassword: User }>(getUserByEmailAndPasswordQuery, {
+    onError: () => dispatch(unsetLoading()),
+    onCompleted: (data) => {
+      if (data?.getUserByEmailAndPassword?.id) {
+        dispatch(unsetLoading());
+        Utils.saveUser(data?.getUserByEmailAndPassword);
+        setNavigteToHome(true);
+      }
+    }
+  });
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (data?.getUserByEmailAndPassword?.id) {
-      dispatch(unsetLoading());
-      Utils.saveUser(data?.getUserByEmailAndPassword);
-      setNavigteToHome(true);
-    }
-  }, [data]);
   if (navigteToHome) return <Navigate replace to={RoutePaths.home} />;
 
   const submit = async () => {
@@ -41,8 +43,12 @@ export default function LoginPage() {
         <Input name="email" type="email" value={email} placeholder="something@something.com" label="Please Enter your Email" onChange={(e: any) => setEmail(e.target.value)}></Input>
         <Input name="password" type="password" value={password} placeholder="****" label="Please Enter your Password" onChange={(e: any) => setPassword(e.target.value)}></Input>
         <button onClick={() => submit()}>Login</button>
-        <div><Link to={RoutePaths.register}>Register</Link></div>
-        <div><Link to={RoutePaths.resetPassword}>Reset Password</Link></div>
+        <div>
+          <Link to={RoutePaths.register}>Register</Link>
+        </div>
+        <div>
+          <Link to={RoutePaths.resetPassword}>Reset Password</Link>
+        </div>
       </div>
     </div>
   );
